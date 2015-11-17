@@ -52,7 +52,6 @@ public class JsonController {
                 mCountryList.add(mCountryStructure);
                 worldlist.add(mCountryStructure);
             }
-
         }catch (IOException e) {
             Log.e("Read attempt Error","IOException");
             e.printStackTrace();
@@ -76,7 +75,7 @@ public class JsonController {
             JSONTokener jsonTokener = new JSONTokener(jsonBuilder.toString());
             JSONArray jsonArray = null;
             jsonArray = new JSONArray(jsonTokener);
-            mContinentsList= getContinetCountries(jsonArray);
+            mContinentsList= getContinentCountries(jsonArray);
         } catch (IOException e) {
             Log.e("Read attempt Error","IOException");
             e.printStackTrace();
@@ -107,7 +106,7 @@ public class JsonController {
         return true;
     }
 
-    public ArrayList<Continent> getContinetCountries(JSONArray jsonArr){
+    public ArrayList<Continent> getContinentCountries(JSONArray jsonArr){
         mCountryList = new ArrayList<>();
 
         ArrayList<Country> africaList = new ArrayList<>();

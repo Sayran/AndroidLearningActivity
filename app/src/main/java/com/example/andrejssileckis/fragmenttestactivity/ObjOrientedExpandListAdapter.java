@@ -1,3 +1,4 @@
+/*
 package com.example.andrejssileckis.fragmenttestactivity;
 
 import android.content.Context;
@@ -9,15 +10,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by andrejs.sileckis on 11/13/2015.
- */
+ *//*
+
 public class ObjOrientedExpandListAdapter extends GenericExpandableListAdapter {
     private Context mContext;
     private ArrayList<Country> mCountryArrayList;
     public final static JsonController JSON_CONTROLLER = new JsonController();
 
-    public ObjOrientedExpandListAdapter(Context mContext,ArrayList<Country> countries){
+    public ObjOrientedExpandListAdapter(Context mContext,ArrayList<Continent> countries){
         this.mContext = mContext;
         this.mCountryArrayList = countries;
     }
@@ -67,3 +70,4 @@ public class ObjOrientedExpandListAdapter extends GenericExpandableListAdapter {
         return convertView;
     }
 }
+*/

@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 /**
  * Created by andrejs.sileckis on 11/10/2015.
  */
@@ -22,40 +21,29 @@ import java.util.ArrayList;
 public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         implements View.OnClickListener {
 
-    private ArrayList<ArrayList<Country>> expandListGroups = new ArrayList<ArrayList<Country>>();
+    private ArrayList<Continent> mOriginalContinentList;
     private Context mContext;
-    private static ArrayList<Country> countryArrayList;
+    private ArrayList<Continent> mChangedList;
 
 
-    public GenericExpandableListAdapter (Context mContext, ArrayList<Country> groups){
+    public GenericExpandableListAdapter (Context mContext, ArrayList<Continent> groups){
         this.mContext = mContext;
-        countryArrayList = groups;
-        this.expandListGroups.add(countryArrayList);
-    }
-
-    public void update(Context mContext,ArrayList<Country> countries){
-
-        this.mContext = mContext;
-        countryArrayList = countries;
-        this.expandListGroups.add(countryArrayList);
+        this.mOriginalContinentList = new ArrayList<>();
+        this.mOriginalContinentList.addAll(groups);
+        this.mChangedList = new ArrayList<>();
+        this.mChangedList.addAll(groups);
 
     }
-
-    public GenericExpandableListAdapter(){}
-
+    
     @Override
     public int getGroupCount() {
-        if(expandListGroups.size()>0)
-        return expandListGroups.size();
-        else return 0;
+        return mChangedList.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        if(expandListGroups.get(groupPosition).size()>0)
-        return expandListGroups.get(groupPosition).size();
-        else
-            return 0;
+        ArrayList<Country> countryArrayList = mChangedList.get(groupPosition).getCountryList();
+        return countryArrayList.size();
     }
 
     @Override
@@ -65,12 +53,13 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
 
     @Override
     public Object getGroup(int groupPosition) {
-        return expandListGroups.get(groupPosition);
+        return mChangedList.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return expandListGroups.get(groupPosition).get(childPosition);
+        ArrayList<Country> countryArrayList = mChangedList.get(groupPosition).getCountryList();
+        return countryArrayList;
     }
 
     @Override
@@ -91,83 +80,86 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
+        Continent continent = (Continent) getGroup(groupPosition);
         if(convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view,null);
         }
-        if(isExpanded){
-            //Toast.makeText(mContext,"Group expanded.",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            //Toast.makeText(mContext,"Group not expanded.",Toast.LENGTH_SHORT).show();
-        }
 
         TextView textGroup = (TextView) convertView.findViewById
                 (R.id.textGroupViewInExpandListView);
 
-        textGroup.setText("Countries");
+        textGroup.setText(continent.getName().trim());
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parent) {
+
+        Country country = (Country) getChild(groupPosition, childPosition);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view_child, null);
-
         }
 
-        final TextView textChild = (TextView) convertView.findViewById
+        TextView textChild = (TextView) convertView.findViewById
                 (R.id.textChildViewInExpandListView);
-        if(childPosition != getChildrenCount(groupPosition)){
-        /*try {
-            if(childPosition == 1){
-                textChild.setText(countryArrayList.get(0).getCountry() + " "
-                        + countryArrayList.get(0).getCapital());
-                Object tag = countryArrayList.get(0);
-                Button expandListChildViewButton = (Button) convertView.findViewById
-                        (R.id.buttonChildMapViewInExpandListView);
-                expandListChildViewButton.setTag(tag);
-                expandListChildViewButton.setOnClickListener(this);
-                return convertView;
-            }else
-            {*/
-            try{
-            Country country = countryArrayList.get(childPosition);
-            if(country != null){
 
-                textChild.setText(countryArrayList.get(childPosition).getCountry() + " "
-                        + countryArrayList.get(childPosition).getCapital());
-            }
-                Object tag = countryArrayList.get(childPosition);
+        textChild.setText(country.getCountry() + " " + country.getCapital());
+
+        Object tag;
+        tag = country;
         /*Toast.makeText(mContext,tag.toString(),Toast.LENGTH_SHORT).show();*/
-                Button expandListChildViewButton = (Button) convertView.findViewById
-                        (R.id.buttonChildMapViewInExpandListView);
-                expandListChildViewButton.setTag(tag);
-                expandListChildViewButton.setOnClickListener(this);
-                return convertView;
+        Button expandListChildViewButton = (Button) convertView.findViewById
+                (R.id.buttonChildMapViewInExpandListView);
+        expandListChildViewButton.setTag(tag);
+        expandListChildViewButton.setOnClickListener(this);
 
-        }catch (IndexOutOfBoundsException e ){
-            Log.e("OutOfBound Exception","Not certain why this error is happening");
-        }
-            return convertView;
-        }else
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
+    }
+
+    public void filterData(String query){
+        query = query.toLowerCase();
+        Log.v(String.valueOf(mChangedList.size()), "GenericExpandableListAdapter");
+        mChangedList.clear();
+
+        if(query.isEmpty()){mChangedList.addAll(mOriginalContinentList);}
+        else {
+            for(Continent continent:mChangedList){
+                ArrayList<Country> countryArrayList = continent.getCountryList();
+                ArrayList<Country> newCountryArrayList = new ArrayList<>();
+
+                for(Country country:countryArrayList){
+                    if(country.getCapital().toLowerCase().contains(query) ||
+                            country.getCountry().toLowerCase().contains(query)){
+                        newCountryArrayList.add(country);
+                    }
+                }
+                if(newCountryArrayList.size() > 0){
+                    Continent nContinent = new Continent(continent.getName(),newCountryArrayList);
+                    mChangedList.add(nContinent);
+                }
+            }
+        }
+        Log.v(String.valueOf(mChangedList.size()), "GenericExpandableListAdapter");
+        notifyDataSetChanged();
     }
 
     @Override
     public void onClick(View v) {
 
         Country counrtyObj = (Country)v.getTag();
-        String geo = new String(counrtyObj.getLatitude() + ", " + counrtyObj.getLongitude());
+        String geo;
+        geo = counrtyObj.getLatitude() + ", " + counrtyObj.getLongitude();
         Toast.makeText(v.getContext(), geo + " .", Toast.LENGTH_SHORT).show();
         // Create a Uri from an intent string. Use the result to create an Intent.
         //Uri gmmIntentUri = Uri.parse("google.streetview:cbll=" + geo);
