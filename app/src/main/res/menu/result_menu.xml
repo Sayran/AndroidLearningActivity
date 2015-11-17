@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ResultActivity">
+    <item android:id="@+id/create_text_file"
+        android:title="@string/action_create_text_file"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/delete_text_file"
+        android:title="@string/action_delete"
+        android:orderInCategory="110"
+        app:showAsAction="never" />
+    <item android:id="@+id/edit_text"
+        android:title="@string/action_edit"
+        android:orderInCategory="110"
+        app:showAsAction="never" />
+    <item android:id="@+id/save_text"
+        android:title="@string/action_save"
+        android:orderInCategory="120"
+        app:showAsAction="never"/>
+
+</menu>

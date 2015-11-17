@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:showIn="@layout/activity_main"
+    tools:context=".MainActivityFragment">
+
+    <!--<TextView android:text="This is text from Fragment _main.xml file" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />-->
+    <Button
+        android:id="@+id/btn_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Dialog"
+        android:onClick="onClick"
+        android:layout_below="@+id/btn_dialog1"
+        android:layout_alignStart="@+id/btn_dialog1" />
+    <Button
+        android:id="@+id/btn_dialog1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Progress Dialog"
+        android:onClick="onClick1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/btn_dialog2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detailed Progess Dialog"
+        android:onClick="onClick2"
+        android:layout_below="@+id/button"
+        android:layout_alignParentStart="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Activity"
+        android:onClick="onClick3"
+        android:id="@+id/button"
+        android:layout_alignTop="@+id/btn_displaynotif"
+        android:layout_alignStart="@+id/btn_dialog" />
+    <Button
+        android:id="@+id/btn_displaynotif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:onClick="onClickNotification"
+        android:layout_below="@+id/btn_dialog"
+        android:layout_alignParentStart="true" />
+    <Button
+        android:id="@+id/btn_webbrowser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Web Browser"
+        android:onClick="onClickWebBrowser" />
+
+    <Button
+        android:id="@+id/btn_makecalls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Call"
+        android:onClick="onClickMakeCalls"
+        android:layout_above="@+id/btn_displaynotif"
+        android:layout_alignStart="@+id/btn_webbrowser" />
+
+    <!-- <Button
+         android:id="@+id/btn_launchMyBrowser"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Launch Browser"
+         android:onClick="onClickBrowserLaunch"
+         android:layout_below="@+id/btn_displaynotif"
+         android:layout_alignParentStart="true" />-->
+
+</RelativeLayout>
