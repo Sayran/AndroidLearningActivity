@@ -21,14 +21,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                MainActivityFragment tab1 = new MainActivityFragment();
-                return tab1;
+                MainActivityFragment mTab1 = new MainActivityFragment();
+                return mTab1;
             case 1:
-                SecondTabFragment tab2 = new SecondTabFragment();
-                return tab2;
+                SecondTabFragment mTab2 = new SecondTabFragment();
+                return mTab2;
             case 2:
-                ThirdTabFragment tab3 = new ThirdTabFragment();
-                return tab3;
+                ThirdTabFragment mTtab3 = new ThirdTabFragment();
+                return mTtab3;
             default:
                 return null;
         }

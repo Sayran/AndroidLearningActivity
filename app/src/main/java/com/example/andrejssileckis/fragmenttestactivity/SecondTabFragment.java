@@ -4,48 +4,39 @@ package com.example.andrejssileckis.fragmenttestactivity;
  * Created by andrejs.sileckis on 10/27/2015.
  */
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnClickListener;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import static android.support.v4.app.ActivityCompat.startActivity;
 import static android.support.v4.content.ContextCompat.getDrawable;
-
 
 public class SecondTabFragment extends Fragment {
 
-    private static final JsonController jsonController = new JsonController();
-    private static GenericExpandableListAdapter expandableListAdapter;
-    private static ArrayList<Country> countryArrayList ;
-    private ExpandableListView expandableListView;
-    private static ArrayList<Country> postSearchList;
-    private static boolean tabSearchOpened = false;
-    private static String searchQuery;
-    private static Drawable iconOpenSearch;
-    private static Drawable iconCloseSearch;
-    private static MenuItem searchAction;
+    private static final JsonController JSON_CONTROLLER = new JsonController();
+    private static GenericExpandableListAdapter sEpandableListAdapter;
+    private static ArrayList<Country> sCountryArrayList ;
+    private ExpandableListView mExpandableListView;
+    private static ArrayList<Country> sPostSearchList;
+    private static boolean sTabSearchOpened = false;
+    private static String sSearchQuery;
+    private static Drawable sIconOpenSearch;
+    private static Drawable sIconCloseSearch;
+    private static MenuItem mSearchAction;
     private static EditText mSearchEt;
 
     @Override
@@ -54,69 +45,64 @@ public class SecondTabFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
         if(savedInstanceState == null) {
-            expandableListAdapter = new
+            sEpandableListAdapter = new
                     GenericExpandableListAdapter(getContext(), creatingCountryData());
         }
         else{
-            postSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUTRIES");
-            countryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
-            tabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
-            searchQuery = savedInstanceState.getString("SEARCH_QUERY");
-            expandableListAdapter = new GenericExpandableListAdapter(getContext(),
-                    postSearchList);}
+            sPostSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUTRIES");
+            sCountryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
+            sTabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
+            sSearchQuery = savedInstanceState.getString("SEARCH_QUERY");
+            sEpandableListAdapter = new GenericExpandableListAdapter(getContext(),
+                    sPostSearchList);}
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.second_tab_fragment, container, false);
-        iconOpenSearch = getDrawable(getContext(), R.drawable.ic_menu_search);
-        iconCloseSearch = getDrawable(getContext(), R.drawable.ic_menu_close_clear_cancel);
+        sIconOpenSearch = getDrawable(getContext(), R.drawable.ic_menu_search);
+        sIconCloseSearch = getDrawable(getContext(), R.drawable.ic_menu_close_clear_cancel);
         if(savedInstanceState == null){
-            expandableListView = (ExpandableListView)
+            mExpandableListView = (ExpandableListView)
                     view.findViewById(R.id.location_expand_list);
-            countryArrayList = new
+            sCountryArrayList = new
                     JsonController().getStructure(getContext(),1);
-            expandableListView.setAdapter(expandableListAdapter);
+            mExpandableListView.setAdapter(sEpandableListAdapter);
         }
         else {
-            /*try {
-                countryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
-                postSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUNTRIES");
-                tabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
-                searchQuery = savedInstanceState.getString("SEARCH_QUERY");
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }*/
+              /*  sCountryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
+                sPostSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUNTRIES");
+                sTabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
+                sSearchQuery = savedInstanceState.getString("SEARCH_QUERY");
+            */
             //onViewStateRestored(savedInstanceState);
-            expandableListView = (ExpandableListView)
+            mExpandableListView = (ExpandableListView)
                     view.findViewById(R.id.location_expand_list);
-            expandableListAdapter = new
-                    GenericExpandableListAdapter(getContext(), postSearchList);
-            expandableListView.setAdapter(expandableListAdapter);
+            sEpandableListAdapter = new
+                    GenericExpandableListAdapter(getContext(), sPostSearchList);
+            mExpandableListView.setAdapter(sEpandableListAdapter);
 
-            if(tabSearchOpened){
-                openSearchBar(searchQuery);
+            if(sTabSearchOpened){
+                openSearchBar(sSearchQuery);
             }
         }
-
         return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("COUTRIES", ((ArrayList<Country>) countryArrayList));
-        outState.putParcelableArrayList("FILTERED_COUNTRIES", ((ArrayList<Country>) postSearchList));
-        outState.putBoolean("SEARCH_OPENED", tabSearchOpened);
-        outState.putString("SEARCH_QUERY", searchQuery);
+        outState.putParcelableArrayList("COUTRIES", sCountryArrayList);
+        outState.putParcelableArrayList("FILTERED_COUNTRIES", sPostSearchList);
+        outState.putBoolean("SEARCH_OPENED", sTabSearchOpened);
+        outState.putString("SEARCH_QUERY", sSearchQuery);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        expandableListAdapter.notifyDataSetChanged();
+        sEpandableListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -124,11 +110,11 @@ public class SecondTabFragment extends Fragment {
             super.onViewStateRestored(savedInstanceState);
         if(savedInstanceState != null) {
             try {
-                countryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
-                postSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUNTRIES");
-                tabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
-                searchQuery = savedInstanceState.getString("SEARCH_QUERY");
-                expandableListAdapter.notifyDataSetChanged();
+                sCountryArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
+                sPostSearchList = savedInstanceState.getParcelableArrayList("FILTERED_COUNTRIES");
+                sTabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
+                sSearchQuery = savedInstanceState.getString("SEARCH_QUERY");
+                sEpandableListAdapter.notifyDataSetChanged();
             }catch (NullPointerException e){
                 Log.e("Null Pointer Exception","Null pointer after attempting to restore data " +
                         "SecondFragment.(onViewStateRestored)");
@@ -138,17 +124,17 @@ public class SecondTabFragment extends Fragment {
         }
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        searchAction = menu.findItem(R.id.action_search);
+        mSearchAction = menu.findItem(R.id.action_search);
         super.onPrepareOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            if (tabSearchOpened) {
+            if (sTabSearchOpened) {
                 closeSearchBar();
             } else {
-                openSearchBar(searchQuery);
+                openSearchBar(sSearchQuery);
             }
             return true;
         }
@@ -165,19 +151,19 @@ public class SecondTabFragment extends Fragment {
         mSearchEt.setText(queryText);
         mSearchEt.requestFocusFromTouch();
 
-        searchAction.setIcon(iconCloseSearch);
-        tabSearchOpened = true;
+        mSearchAction.setIcon(sIconCloseSearch);
+        sTabSearchOpened = true;
     }
 
     public void closeSearchBar(){
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowCustomEnabled(false);
-        searchAction.setIcon(iconOpenSearch);
+        mSearchAction.setIcon(sIconOpenSearch);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        tabSearchOpened = false;
+        sTabSearchOpened = false;
     }
 
     public ArrayList<Country> creatingCountryData() {
-        final ArrayList<Country> countries = jsonController.getStructure(getContext());
+        final ArrayList<Country> countries = JSON_CONTROLLER.getStructure(getContext());
         return countries;
     }
     public ArrayList<ArrayList<String>> creatingCountryData(ArrayList<Country> data) {
@@ -189,10 +175,10 @@ public class SecondTabFragment extends Fragment {
                     countries.get(i).getCapital());
         }
 
-        ArrayList<ArrayList<String>> expandableListViewGroups = new ArrayList<ArrayList<String>>();
-        expandableListViewGroups.add(countriesNamesList);
+        ArrayList<ArrayList<String>> mExpandableListViewGroups = new ArrayList<ArrayList<String>>();
+        mExpandableListViewGroups.add(countriesNamesList);
 
-        return expandableListViewGroups;
+        return mExpandableListViewGroups;
     }
 
     public class SearchWatcher implements TextWatcher {
@@ -203,21 +189,20 @@ public class SecondTabFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            searchQuery = mSearchEt.getText().toString();
-            postSearchList = performSearch(countryArrayList, searchQuery);
+            sSearchQuery = mSearchEt.getText().toString();
+            sPostSearchList = performSearch(sCountryArrayList, sSearchQuery);
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            //expandableListAdapter.update(getContext(), postSearchList);
-            expandableListAdapter.notifyDataSetChanged();
+            //sEpandableListAdapter.update(getContext(), sPostSearchList);
+            sEpandableListAdapter.notifyDataSetChanged();
 
         }
 
     }
     /**
      * Goes through the given list and filters it according to the given query.
-     *
      * @param countries list given as search sample
      * @param query to be searched
      * @return new filtered arrayList

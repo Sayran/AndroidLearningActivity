@@ -11,32 +11,32 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
-import static android.app.PendingIntent.getActivity;
-import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * Created by andrejs.sileckis on 11/10/2015.
  */
 
-public class GenericExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
+public class GenericExpandableListAdapter extends BaseExpandableListAdapter
+        implements View.OnClickListener {
 
     private ArrayList<ArrayList<Country>> expandListGroups = new ArrayList<ArrayList<Country>>();
-    private Context context;
+    private Context mContext;
     private static ArrayList<Country> countryArrayList;
 
 
-    public GenericExpandableListAdapter (Context context, ArrayList<Country> groups){
-        this.context = context;
-        this.countryArrayList = groups;
+    public GenericExpandableListAdapter (Context mContext, ArrayList<Country> groups){
+        this.mContext = mContext;
+        countryArrayList = groups;
         this.expandListGroups.add(countryArrayList);
     }
 
-    public void update(Context context,ArrayList<Country> countries){
+    public void update(Context mContext,ArrayList<Country> countries){
 
-        this.context = context;
-        this.countryArrayList = countries;
+        this.mContext = mContext;
+        countryArrayList = countries;
         this.expandListGroups.add(countryArrayList);
 
     }
@@ -92,15 +92,15 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter impl
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         if(convertView == null){
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view,null);
         }
         if(isExpanded){
-            //Toast.makeText(context,"Group expanded.",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext,"Group expanded.",Toast.LENGTH_SHORT).show();
         }
         else {
-            //Toast.makeText(context,"Group not expanded.",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext,"Group not expanded.",Toast.LENGTH_SHORT).show();
         }
 
         TextView textGroup = (TextView) convertView.findViewById
@@ -114,7 +114,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter impl
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) mContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view_child, null);
 
@@ -143,7 +143,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter impl
                         + countryArrayList.get(childPosition).getCapital());
             }
                 Object tag = countryArrayList.get(childPosition);
-        /*Toast.makeText(context,tag.toString(),Toast.LENGTH_SHORT).show();*/
+        /*Toast.makeText(mContext,tag.toString(),Toast.LENGTH_SHORT).show();*/
                 Button expandListChildViewButton = (Button) convertView.findViewById
                         (R.id.buttonChildMapViewInExpandListView);
                 expandListChildViewButton.setTag(tag);
@@ -165,21 +165,19 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter impl
 
     @Override
     public void onClick(View v) {
-        Object tag = v.getTag();
-        //countryArrayList = new JsonController().getStructure(v.getContext(),1);
-        /*String geo = new String(countryArrayList.get((int)tag).getLatitude() +
-                "," + countryArrayList.get((int)tag)
-                .getLongitude().toString());*/
+
         Country counrtyObj = (Country)v.getTag();
         String geo = new String(counrtyObj.getLatitude() + ", " + counrtyObj.getLongitude());
         Toast.makeText(v.getContext(), geo + " .", Toast.LENGTH_SHORT).show();
         // Create a Uri from an intent string. Use the result to create an Intent.
         //Uri gmmIntentUri = Uri.parse("google.streetview:cbll=" + geo);
-        String strUri = "http://maps.google.com/maps?q=loc:" + geo + " (" + counrtyObj.getCapital() + ")";
+        String strUri = "http://maps.google.com/maps?q=loc:" + geo +
+                " (" + counrtyObj.getCapital() + ")";
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
 
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-        //intent.setClassName("com.google.android.apps.maps", "com.example.andrejssileckis.fragmenttestactivity.MapsActivity");
+        //intent.setClassName("com.google.android.apps.maps",
+        // "com.example.andrejssileckis.fragmenttestactivity.MapsActivity");
 
         v.getContext().startActivity(intent);
 

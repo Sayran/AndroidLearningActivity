@@ -13,27 +13,27 @@ import java.util.ArrayList;
  * Created by andrejs.sileckis on 11/13/2015.
  */
 public class ObjOrientedExpandListAdapter extends GenericExpandableListAdapter {
-    private Context context;
-    private ArrayList<Country> countryArrayList;
-    JsonController jsonController = new JsonController();
+    private Context mContext;
+    private ArrayList<Country> mCountryArrayList;
+    public final static JsonController JSON_CONTROLLER = new JsonController();
 
-    public ObjOrientedExpandListAdapter(Context context,ArrayList<Country> countries){
-        this.context = context;
-        this.countryArrayList = countries;
+    public ObjOrientedExpandListAdapter(Context mContext,ArrayList<Country> countries){
+        this.mContext = mContext;
+        this.mCountryArrayList = countries;
     }
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         if(convertView == null){
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view,null);
         }
         if(isExpanded){
-            //Toast.makeText(context,"Group expanded.",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext,"Group expanded.",Toast.LENGTH_SHORT).show();
         }
         else {
-            //Toast.makeText(context,"Group not expanded.",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext,"Group not expanded.",Toast.LENGTH_SHORT).show();
         }
 
         TextView textGroup = (TextView) convertView.findViewById
@@ -48,17 +48,17 @@ public class ObjOrientedExpandListAdapter extends GenericExpandableListAdapter {
                              View convertView, ViewGroup parent) {
 
         if(convertView == null){
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.expand_list_view_child,null);
         }
 
         final TextView textChild = (TextView) convertView.findViewById
                 (R.id.textChildViewInExpandListView);
-        textChild.setText(countryArrayList.get(childPosition).getCountry() + ", "
-                + countryArrayList.get(childPosition).getCapital());
-        Object tag = (Country) countryArrayList.get(childPosition);
-        //Toast.makeText(context,tag.toString(),Toast.LENGTH_SHORT).show();
+        textChild.setText(mCountryArrayList.get(childPosition).getCountry() + ", "
+                + mCountryArrayList.get(childPosition).getCapital());
+        Object tag = mCountryArrayList.get(childPosition);
+        //Toast.makeText(mContext,tag.toString(),Toast.LENGTH_SHORT).show();
 
         Button expandListChildViewButton = (Button) convertView.findViewById
                 (R.id.buttonChildMapViewInExpandListView);
