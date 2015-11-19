@@ -59,7 +59,8 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         ArrayList<Country> countryArrayList = mChangedList.get(groupPosition).getCountryList();
-        return countryArrayList;
+        Country country = countryArrayList.get(childPosition);
+        return country;
     }
 
     @Override

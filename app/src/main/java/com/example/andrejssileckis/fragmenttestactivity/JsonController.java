@@ -22,6 +22,7 @@ public class JsonController {
 
     public Country mCountryStructure;
     private ArrayList<Country> mCountryList;
+    private ArrayList<Country> mCountryListTemp;
     private ArrayList<Continent> mContinentsList;
     private Continent mContinents;
 
@@ -47,7 +48,8 @@ public class JsonController {
                         jsonExploreObject.getString("CapitalName"),
                         jsonExploreObject.getString("CapitalLatitude"),
                         jsonExploreObject.getString("CapitalLongitude"),
-                        jsonExploreObject.getString("CountryCode"));
+                        jsonExploreObject.getString("CountryCode"),
+                        jsonExploreObject.getString("ContinentName"));
 
                 mCountryList.add(mCountryStructure);
                 worldlist.add(mCountryStructure);
@@ -62,8 +64,8 @@ public class JsonController {
         return mCountryList;
 
     }
-    public ArrayList getStructure(Context context){
-
+    public ArrayList<Continent> getStructure(Context context){
+        this.mContinentsList = new ArrayList<>();
         BufferedReader jsonReader = new BufferedReader(
                 new InputStreamReader(context.getResources().openRawResource(R.raw.json_countries)));
             StringBuilder jsonBuilder = new StringBuilder();
@@ -73,9 +75,14 @@ public class JsonController {
                 jsonBuilder.append(line).append("\n");
             }
             JSONTokener jsonTokener = new JSONTokener(jsonBuilder.toString());
-            JSONArray jsonArray = null;
-            jsonArray = new JSONArray(jsonTokener);
-            mContinentsList= getContinentCountries(jsonArray);
+            JSONArray jsonArray = new JSONArray(jsonTokener);
+
+            mContinentsList = getContinentCountries(jsonArray);
+            if(mContinentsList == null){
+                this.mCountryList = getStructure(context,1);
+                mContinentsList = continentsBuilder(mCountryList);
+                return mContinentsList;
+            }
         } catch (IOException e) {
             Log.e("Read attempt Error","IOException");
             e.printStackTrace();
@@ -83,7 +90,84 @@ public class JsonController {
             Log.e("JSON builder", "Failed to create JSON structure.");
             j.printStackTrace();
         }
+        return mContinentsList;
+    }
 
+    public ArrayList<Continent> getContinentCountries(JSONArray jsonArr){
+        ArrayList<Continent> continentsList;
+        this.mCountryList = new ArrayList<>();
+        this.mCountryListTemp = new ArrayList<Country>();
+
+        try {
+
+            JSONArray jsonArray = jsonArr;
+
+            for(int i = 0; i < jsonArray.length();i++){
+                JSONObject jsonExploreObject = jsonArray.getJSONObject(i);
+                mCountryStructure = new Country(jsonExploreObject.getString("CountryName"),
+                        jsonExploreObject.getString("CapitalName"),
+                        jsonExploreObject.getString("CapitalLatitude"),
+                        jsonExploreObject.getString("CapitalLongitude"),
+                        jsonExploreObject.getString("CountryCode"),
+                        jsonExploreObject.getString("ContinentName"));
+                mCountryListTemp.add(mCountryStructure);
+            }
+
+        }catch (JSONException e) {
+            Log.e("JSON Exception","Exception while  attempting to add Country class " +
+                    "to List in JSONController class ");
+            e.printStackTrace();
+        }
+        continentsList = continentsBuilder(mCountryListTemp);
+        return continentsList;
+    }
+
+    public ArrayList<Continent> continentsBuilder(ArrayList<Country> countries){
+        this.mContinentsList = new ArrayList<>();
+        ArrayList<Country> africaList = new ArrayList<>();
+        ArrayList<Country> asiaList = new ArrayList<>();
+        ArrayList<Country> australiaList = new ArrayList<>();
+        ArrayList<Country> europeList = new ArrayList<>();
+        ArrayList<Country> centAmericaList = new ArrayList<>();
+        ArrayList<Country> northAmericaList = new ArrayList<>();
+        ArrayList<Country> southAmericaList = new ArrayList<>();
+        ArrayList<Country> otherList = new ArrayList<>();
+
+        for (Country country:countries) {
+            if (country.getContinent().equals("Africa"))
+            {africaList.add(country);}
+            else if (country.getContinent().equals("Asia"))
+            {asiaList.add(country);}
+            else if (country.getContinent().equals("Australia"))
+            {australiaList.add(country);}
+            else if (country.getContinent().equals("Europe"))
+            {europeList.add(country);}
+            else if (country.getContinent().equals("Central America"))
+            {centAmericaList.add(country);}
+            else if (country.getContinent().equals("North America"))
+            {northAmericaList.add(country);}
+            else if(country.getContinent().equals("South America"))
+            {southAmericaList.add(country);}
+            else otherList.add(country);
+        }
+        mContinents = new Continent("Africa", africaList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("Asia", asiaList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("Australia", australiaList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("Europe", europeList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("Central America", centAmericaList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("North America", northAmericaList);
+        mContinentsList.add(mContinents);
+        mContinents = new Continent("South America", southAmericaList);
+        mContinentsList.add(mContinents);
+        return mContinentsList;
+    }
+
+    public ArrayList<Continent> getContinentList(){
         return mContinentsList;
     }
 
@@ -104,80 +188,6 @@ public class JsonController {
         }
         Toast.makeText(context, "Json valid",Toast.LENGTH_SHORT).show();
         return true;
-    }
-
-    public ArrayList<Continent> getContinentCountries(JSONArray jsonArr){
-        mCountryList = new ArrayList<>();
-
-        ArrayList<Country> africaList = new ArrayList<>();
-        ArrayList<Country> asiaList = new ArrayList<>();
-        ArrayList<Country> australiaList = new ArrayList<>();
-        ArrayList<Country> europeList = new ArrayList<>();
-        ArrayList<Country> centAmericaList = new ArrayList<>();
-        ArrayList<Country> northAmericaaList = new ArrayList<>();
-        ArrayList<Country> southAmericaList = new ArrayList<>();
-
-        try {
-
-            JSONArray jsonArray = jsonArr;
-
-            for(int i = 0; i < jsonArray.length();i++){
-                JSONObject jsonExploreObject = jsonArray.getJSONObject(i);
-                mCountryStructure = new Country();
-                mCountryStructure = new Country(jsonExploreObject.getString("CountryName"),
-                        jsonExploreObject.getString("CapitalName"),
-                        jsonExploreObject.getString("CapitalLatitude"),
-                        jsonExploreObject.getString("CapitalLongitude"),
-                        jsonExploreObject.getString("CountryCode"));
-                switch (jsonExploreObject.getString("Continent")){
-                    case ("Africa"):
-                        africaList.add(mCountryStructure);
-                        break;
-                    case ("Asia"):
-                        asiaList.add(mCountryStructure);
-                        break;
-                    case ("Australia"):
-                        europeList.add(mCountryStructure);
-                        break;
-                    case ("Europe"):
-                        centAmericaList.add(mCountryStructure);
-                        break;
-                    case ("Central America"):
-                        australiaList.add(mCountryStructure);
-                        break;
-                    case ("North America"):
-                        northAmericaaList.add(mCountryStructure);
-                        break;
-                    case ("South America"):
-                        southAmericaList.add(mCountryStructure);
-                        break;
-                }
-
-            }
-            mContinents = new Continent("Africa", africaList);
-            mContinentsList.add(mContinents);
-            mContinents = new Continent("Asia", asiaList);
-            mContinentsList.add(mContinents);
-            mContinents = new Continent("Australia", australiaList);
-            mContinents = new Continent("Europe", europeList);
-            mContinentsList.add(mContinents);
-            mContinents = new Continent("Central America", centAmericaList);
-            mContinentsList.add(mContinents);
-            mContinents = new Continent("North America", northAmericaaList);
-            mContinentsList.add(mContinents);
-            mContinents = new Continent("South America", southAmericaList);
-            mContinentsList.add(mContinents);
-
-        }catch (JSONException e) {
-            Log.e("JSON Exception","Exception while  attempting to add Country class " +
-                    "to List in JSONController class ");
-            e.printStackTrace();
-        }
-        return mContinentsList;
-    }
-
-    public ArrayList<Continent> getContinentList(){
-        return mContinentsList;
     }
 
 

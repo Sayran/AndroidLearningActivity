@@ -6,17 +6,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ExpandableListView
-        android:id="@+id/location_expand_list"
+        android:id="@+id/location_expand_list_unique"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/search" />
-
-    <SearchView android:id="@+id/search" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:visibility="invisible"
-        android:layout_alignParentTop="true"
+        android:actionViewClass="android.widget.SearchView"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>

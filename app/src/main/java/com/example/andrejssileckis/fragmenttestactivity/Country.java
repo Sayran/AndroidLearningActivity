@@ -14,6 +14,7 @@ public class Country implements Parcelable {
     private String mLatitude;
     private String mLongitude;
     private String mCountryCode;
+    private String mContinent;
 
 
     Country(){
@@ -24,10 +25,13 @@ public class Country implements Parcelable {
         this.mLatitude = mLatitude;
         this.mLongitude = mLongitude;
     }
+
     Country(String mCountry, String mCapital, String mLatitude,
-            String mLongitude , String mCountryCode){
+            String mLongitude , String mCountryCode, String mContinent){
         this(mCountry,mCapital,mLatitude,mLongitude);
         this.mCountryCode = mCountryCode;
+        this.mContinent = mContinent;
+
 
     }
 
@@ -50,6 +54,10 @@ public class Country implements Parcelable {
 
     public String getCountryCode() {
         return mCountryCode;
+    }
+
+    public String getContinent() {
+        return mContinent;
     }
 
 
