@@ -9,49 +9,57 @@ import android.widget.Toast;
  * Created by andrejs.sileckis on 11/5/2015.
  */
 public class Country implements Parcelable {
-    private String country;
-    private String capital;
-    private String latitude;
-    private String longitude;
-    private String countryCode;
-    private String continetName;
+    private String mCountry;
+    private String mCapital;
+    private String mLatitude;
+    private String mLongitude;
+    private String mCountryCode;
+    private String mContinent;
+
 
     Country(){
     }
-    Country(String country, String capital, String latitude, String longitude , String countryCode,
-            String continetName){
-        this.country = country;
-        this.capital = capital;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.countryCode = countryCode;
-        this.continetName = continetName;
+    Country(String mCountry, String mCapital, String mLatitude, String mLongitude){
+        this.mCountry = mCountry;
+        this.mCapital = mCapital;
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
+    }
+
+    Country(String mCountry, String mCapital, String mLatitude,
+            String mLongitude , String mCountryCode, String mContinent){
+        this(mCountry,mCapital,mLatitude,mLongitude);
+        this.mCountryCode = mCountryCode;
+        this.mContinent = mContinent;
+
+
     }
 
 
     public String getCountry() {
-        return country;
+        return mCountry;
     }
 
     public String getCapital() {
-        return capital;
+        return mCapital;
     }
 
     public String getLongitude() {
-        return longitude;
+        return mLongitude;
     }
 
     public String getLatitude() {
-        return latitude;
+        return mLatitude;
     }
 
     public String getCountryCode() {
-        return countryCode;
+        return mCountryCode;
     }
 
-    public String getContinetName() {
-        return continetName;
+    public String getContinent() {
+        return mContinent;
     }
+
 
     public void dataPrint(Context context,Country object){
         Toast.makeText(context,object.getCountry()+", "+object.getCapital()+
@@ -59,12 +67,12 @@ public class Country implements Parcelable {
     }
 
     protected Country(Parcel in) {
-        this.country = in.readString();
-        this.capital = in.readString();
-        this.latitude = in.readString();
-        this.longitude = in.readString();
-        this.countryCode = in.readString();
-        this.continetName = in.readString();
+        this.mCountry = in.readString();
+        this.mCapital = in.readString();
+        this.mLatitude = in.readString();
+        this.mLongitude = in.readString();
+        this.mCountryCode = in.readString();
+
     }
 
     @Override
@@ -74,12 +82,11 @@ public class Country implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(country);
-        dest.writeString(capital);
-        dest.writeString(latitude);
-        dest.writeString(longitude);
-        dest.writeString(countryCode);
-        dest.writeString(continetName);
+        dest.writeString(mCountry);
+        dest.writeString(mCapital);
+        dest.writeString(mLatitude);
+        dest.writeString(mLongitude);
+        dest.writeString(mCountryCode);
     }
 
     @SuppressWarnings("unused")

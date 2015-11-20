@@ -1,7 +1,5 @@
 package com.example.andrejssileckis.fragmenttestactivity;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -12,25 +10,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-    CharSequence[] items = {"Home", "Work", "Garden", "Beach"};
-    boolean[] itemChecked = new boolean[items.length];
-    int request_Code = 1;
-    int notificationID = 1;
+    private CharSequence[] mItems = {"Home", "Work", "Garden", "Beach"};
+    private boolean[] mItemChecked = new boolean[mItems.length];
+    public int mRequestCode = 1;
+    public int mNotificationID = 1;
 
-    final JsonController jsonController = new JsonController();
-    ProgressDialog progressDialog;
+    public final static JsonController JSON_CONTROLLER = new JsonController();
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,24 +38,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         createTabsOverlay();
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds mItems to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+    public boolean onOptionsItemSelected(MenuItem mItem) {
+        // Handle action bar mItem clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
+        int id = mItem.getItemId();
+        return super.onOptionsItemSelected(mItem);
     }
 
     public void onClick(View view) {
@@ -81,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick2(View view) {
         showDialog(1);
-        progressDialog.setProgress(0);
+        mProgressDialog.setProgress(0);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int i = 1; i < 35; i++) {
                     try {
                         Thread.sleep(1000);
-                        progressDialog.incrementProgressBy( 100 / 15);
+                        mProgressDialog.incrementProgressBy( 100 / 15);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick3(View view) {
         startActivityForResult(new Intent(
-                "com.example.andrejssileckis.dialogs.SecondActivity"), request_Code);
+                "com.example.andrejssileckis.dialogs.SecondActivity"), mRequestCode);
     }
 
     @Override
@@ -123,19 +121,20 @@ public class MainActivity extends AppCompatActivity {
                                                 , Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                        ).setMultiChoiceItems(items, itemChecked
+                        ).setMultiChoiceItems(mItems, mItemChecked
                                 , new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            public void onClick
+                                    (DialogInterface dialog, int which, boolean isChecked) {
                                 Toast.makeText(getBaseContext()
-                                        , items[which] + (isChecked ? " checked !" : " unchecked!")
+                                        , mItems[which] + (isChecked ? " checked !" : " unchecked!")
                                         , Toast.LENGTH_SHORT).show();
                             }
                         }).create();
             case 1:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle("Download something...");
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setTitle("Download something...");
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                                         "OK Clicked", Toast.LENGTH_SHORT).show();
                             }
                         });
-                progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+                mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -151,18 +150,18 @@ public class MainActivity extends AppCompatActivity {
                                         "Cancel clicked", Toast.LENGTH_SHORT).show();
                             }
                         });
-                return progressDialog;
+                return mProgressDialog;
             case 2:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Some Simple text here...");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+                mBuilder.setTitle("Some Simple text here...");
+                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getBaseContext(),
                                 "OK clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getBaseContext(),
@@ -170,23 +169,24 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-                builder.setMultiChoiceItems(items, itemChecked,
+                mBuilder.setMultiChoiceItems(mItems, mItemChecked,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            public void onClick
+                                    (DialogInterface dialog, int which, boolean isChecked) {
                                 Toast.makeText(getBaseContext(),
-                                        items[which] + (isChecked ? " checked " : " unchecked"),
+                                        mItems[which] + (isChecked ? " checked " : " unchecked"),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
-                return builder.create();
+                return mBuilder.create();
         }
         return null;
 
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == request_Code) {
+        if (requestCode == mRequestCode) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
             }
@@ -198,14 +198,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void displayNotification() {
-        Intent intent = new Intent(
+        Intent mNotificationIntent = new Intent(
                 this, MainActivity.class
         );
         long[] vibr = new long[]{100, 250, 100, 500};
-        intent.putExtra("notificationID", notificationID);
+        mNotificationIntent.putExtra("mNotificationID", mNotificationID);
 
-        NotificationCompat.Builder builder;
-        builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder mBuilder;
+        mBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle("some title text....")
                 .setContentText("is this content ?")
                 .setSmallIcon(R.drawable.ic_notify_icon)
@@ -215,52 +215,52 @@ public class MainActivity extends AppCompatActivity {
 
         stackBuilder.addParentStack(MainActivity.class);
 
-        stackBuilder.addNextIntent(intent);
+        stackBuilder.addNextIntent(mNotificationIntent);
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        builder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager =
+        mBuilder.setContentIntent(pendingIntent);
+        NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(R.id.btn_displaynotif, builder.build());
+        mNotificationManager.notify(R.id.btn_displaynotif, mBuilder.build());
     }
 
     public void onClickWebBrowser(View view) {
-        Intent i = new Intent("android.intent.action.VIEW");
-        i.setData(Uri.parse("http://habrahabr.ru"));
-        startActivity(i);
+        Intent mBrowseOpenIntent = new Intent("android.intent.action.VIEW");
+        mBrowseOpenIntent.setData(Uri.parse("http://habrahabr.ru"));
+        startActivity(mBrowseOpenIntent);
         Toast.makeText(this, "Trying to open browser", Toast.LENGTH_LONG).show();
     }
 
     public void onClickMakeCalls(View view) {
-        Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "));
-        startActivity(i);
+        Intent mPhoneCallIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "));
+        startActivity(mPhoneCallIntent);
     }
 
     public void onClickShowMap(View view, String string) {
-        Intent i = new Intent(Intent.ACTION_VIEW,
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("google.streetview:cbll="+string));
                 /*Uri.parse("geo: 56.953101, 23.721114?q=56.953101," +
                         "23.721114(IsThisMarker+SomewhereInJurmala")*/
-        i.setPackage("com.google.android.apps.maps");
-        startActivity(i);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
     public void createTabsOverlay() {
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Main"));
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("Text"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        final TabLayout TAB_LAYOUT = (TabLayout) findViewById(R.id.tab_layout);
+        TAB_LAYOUT.addTab(TAB_LAYOUT.newTab().setText("Main"));
+        TAB_LAYOUT.addTab(TAB_LAYOUT.newTab().setText("Map"));
+        TAB_LAYOUT.addTab(TAB_LAYOUT.newTab().setText("Text"));
+        TAB_LAYOUT.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+                (getSupportFragmentManager(), TAB_LAYOUT.getTabCount());
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(TAB_LAYOUT));
+        TAB_LAYOUT.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
