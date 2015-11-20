@@ -129,14 +129,11 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         return true;
     }
 
-    public void filterData(String query, Context context){
+    public void filterData(String query){
         this.mSearchString = query.toLowerCase();
         Log.v(String.valueOf(mChangedList.size()), "GenericExpandableListAdapter");
         ArrayList<Continent> tempContinents = new ArrayList<>();
         boolean flag = false;
-        //mChangedList.clear();
-        /*Toast.makeText(context, mSearchString + " this is current data in search",
-                Toast.LENGTH_SHORT).show();*/
 
         if(mSearchString.isEmpty()){
             mChangedList.clear();

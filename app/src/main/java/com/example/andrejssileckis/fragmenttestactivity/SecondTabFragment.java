@@ -33,7 +33,6 @@ public class SecondTabFragment extends Fragment {
     private GenericExpandableListAdapter mEpandableListAdapter;
     private static ArrayList<Continent> sContinentArrayList  = new ArrayList<>();
     private ExpandableListView mExpandableListView;
-    private static ArrayList<Continent> sPostSearchContinetList = new ArrayList<>();
     private static boolean sTabSearchOpened = false;
     private static Drawable sIconOpenSearch;
     private static Drawable sIconCloseSearch;
@@ -170,19 +169,19 @@ public class SecondTabFragment extends Fragment {
         mSearchAction.setIcon(sIconOpenSearch);
         ((AppCompatActivity)getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(true);
-        mEpandableListAdapter.filterData("", getContext());
+        mEpandableListAdapter.filterData("");
         sTabSearchOpened = false;
         return false;
     }
 
     public boolean onQueryTextSubmit(String query) {
-        mEpandableListAdapter.filterData(query, getContext());
+        mEpandableListAdapter.filterData(query);
         expandAll();
         return false;
     }
 
     public boolean onQueryTextChange(String newText) {
-        mEpandableListAdapter.filterData(newText, getContext());
+        mEpandableListAdapter.filterData(newText);
         expandAll();
         return false;
     }
@@ -201,9 +200,7 @@ public class SecondTabFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             mSearchQuery = mEditText.getText().toString();
-            /*Toast.makeText(getContext(),mSearchQuery + " this is current data in search",
-                    Toast.LENGTH_SHORT).show();*/
-            mEpandableListAdapter.filterData(mSearchQuery, getContext());
+            mEpandableListAdapter.filterData(mSearchQuery);
             expandAll();
 
         }
