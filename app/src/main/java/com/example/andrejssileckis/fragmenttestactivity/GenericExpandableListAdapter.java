@@ -24,6 +24,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
     private ArrayList<Continent> mOriginalContinentList;
     private Context mContext;
     private ArrayList<Continent> mChangedList;
+    private String mSearchString;
 
 
     public GenericExpandableListAdapter (Context mContext, ArrayList<Continent> groups){
@@ -128,28 +129,42 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         return true;
     }
 
-    public void filterData(String query){
-        query = query.toLowerCase();
+    public void filterData(String query, Context context){
+        this.mSearchString = query.toLowerCase();
         Log.v(String.valueOf(mChangedList.size()), "GenericExpandableListAdapter");
-        mChangedList.clear();
+        ArrayList<Continent> tempContinents = new ArrayList<>();
+        boolean flag = false;
+        //mChangedList.clear();
+        /*Toast.makeText(context, mSearchString + " this is current data in search",
+                Toast.LENGTH_SHORT).show();*/
 
-        if(query.isEmpty()){mChangedList.addAll(mOriginalContinentList);}
+        if(mSearchString.isEmpty()){
+            mChangedList.clear();
+            mChangedList.addAll(mOriginalContinentList);
+        }
         else {
-            for(Continent continent:mChangedList){
+            ArrayList<Continent> continents = mChangedList;
+            for(Continent continent:continents){
                 ArrayList<Country> countryArrayList = continent.getCountryList();
                 ArrayList<Country> newCountryArrayList = new ArrayList<>();
 
                 for(Country country:countryArrayList){
-                    if(country.getCapital().toLowerCase().contains(query) ||
-                            country.getCountry().toLowerCase().contains(query)){
+                    if(country.getCapital().toLowerCase().contains(mSearchString) ||
+                            country.getCountry().toLowerCase().contains(mSearchString)){
                         newCountryArrayList.add(country);
                     }
                 }
                 if(newCountryArrayList.size() > 0){
                     Continent nContinent = new Continent(continent.getName(),newCountryArrayList);
-                    mChangedList.add(nContinent);
+                    flag = true;
+                    tempContinents.add(nContinent);
                 }
             }
+        }
+        if(flag){
+            mChangedList.clear();
+            mChangedList.addAll(tempContinents);
+            tempContinents.clear();
         }
         Log.v(String.valueOf(mChangedList.size()), "GenericExpandableListAdapter");
         notifyDataSetChanged();

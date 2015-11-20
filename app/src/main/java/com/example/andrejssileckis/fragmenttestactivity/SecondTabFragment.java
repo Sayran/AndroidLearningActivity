@@ -12,20 +12,22 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
 
 import static android.support.v4.content.ContextCompat.getDrawable;
 
-public class SecondTabFragment extends Fragment implements
-        SearchView.OnCloseListener, SearchView.OnQueryTextListener{
+public class SecondTabFragment extends Fragment {
 
     private static final JsonController JSON_CONTROLLER = new JsonController();
     private GenericExpandableListAdapter mEpandableListAdapter;
@@ -36,6 +38,8 @@ public class SecondTabFragment extends Fragment implements
     private static Drawable sIconOpenSearch;
     private static Drawable sIconCloseSearch;
     private static MenuItem mSearchAction;
+    private String mSearchQuery;
+    private EditText mEditText;
     private SearchView mSearchView;
     private SearchManager mSearchManager;
 
@@ -104,8 +108,8 @@ public class SecondTabFragment extends Fragment implements
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mSearchAction = menu.findItem(R.id.action_search);
-        mSearchView = new SearchView(((MainActivity) getActivity())
-                .getSupportActionBar().getThemedContext());
+       /* mSearchView = new SearchView(((MainActivity) getActivity())
+                .getSupportActionBar().getThemedContext());*/
         MenuItemCompat.setShowAsAction(mSearchAction, MenuItemCompat
                 .SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
@@ -129,7 +133,7 @@ public class SecondTabFragment extends Fragment implements
             if (sTabSearchOpened) {
                 onClose();
             } else {
-                openSearchBar(mSearchView.getQuery().toString());
+                openSearchBar(mSearchQuery);
             }
             return true;
         }
@@ -141,34 +145,18 @@ public class SecondTabFragment extends Fragment implements
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.search_bar);
         actionBar.setDisplayShowTitleEnabled(false);
-        mSearchView = (SearchView) actionBar.getCustomView().findViewById(R.id.action_search);
+        mEditText = (EditText) actionBar.getCustomView().findViewById(R.id.etSearch);
+        mSearchAction.setIcon(sIconCloseSearch);
+        mEditText.addTextChangedListener(new SearchWatcher());
+        mEditText.setText(queryText);
+        mEditText.requestFocusFromTouch();
+        sTabSearchOpened = true;
 /*        mSearchView.setOnQueryTextListener(this);
         mSearchView.requestFocusFromTouch();
         mSearchView.setOnCloseListener(this);*/
 
-/*        mSearchAction.setIcon(sIconCloseSearch);*/
-        sTabSearchOpened = true;
     }
 
-    /*public ArrayList<Country> creatingCountryData() {
-        final ArrayList<Country> countries = JSON_CONTROLLER.getStructure(getContext());
-        return countries;
-    }
-    public ArrayList<ArrayList<String>> creatingCountryData(ArrayList<Country> data) {
-        final ArrayList<Country> countries = data;
-        ArrayList<String> countriesNamesList = new ArrayList<>();
-
-        for (int i = 0; i < countries.size(); i++) {
-            countriesNamesList.add(countries.get(i).getCountry() + ", " +
-                    countries.get(i).getCapital());
-        }
-
-        ArrayList<ArrayList<String>> mExpandableListViewGroups = new ArrayList<ArrayList<String>>();
-        mExpandableListViewGroups.add(countriesNamesList);
-
-        return mExpandableListViewGroups;
-    }
-*/
     private void expandAll(){
         int count = mEpandableListAdapter.getGroupCount();
         for(int i = 0; i < count; i++){
@@ -176,33 +164,49 @@ public class SecondTabFragment extends Fragment implements
         }
     }
 
-   /* private void populateList(){
-
-    }*/
-
-    @Override
     public boolean onClose() {
         ((AppCompatActivity)getActivity()).getSupportActionBar()
                 .setDisplayShowCustomEnabled(false);
         mSearchAction.setIcon(sIconOpenSearch);
         ((AppCompatActivity)getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(true);
-        mEpandableListAdapter.filterData("");
+        mEpandableListAdapter.filterData("", getContext());
         sTabSearchOpened = false;
         return false;
     }
 
-    @Override
     public boolean onQueryTextSubmit(String query) {
-        mEpandableListAdapter.filterData(query);
+        mEpandableListAdapter.filterData(query, getContext());
         expandAll();
         return false;
     }
 
-    @Override
     public boolean onQueryTextChange(String newText) {
-        mEpandableListAdapter.filterData(newText);
+        mEpandableListAdapter.filterData(newText, getContext());
         expandAll();
         return false;
+    }
+
+    public class SearchWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mSearchQuery = mEditText.getText().toString();
+            /*Toast.makeText(getContext(),mSearchQuery + " this is current data in search",
+                    Toast.LENGTH_SHORT).show();*/
+            mEpandableListAdapter.filterData(mSearchQuery, getContext());
+            expandAll();
+
+        }
+
     }
 }
