@@ -76,7 +76,8 @@ public class SecondTabFragment extends Fragment {
         }
         else {
                 sContinentArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
-                sPostSearchContinetList = savedInstanceState.getParcelableArrayList("FILTERED_COUNTRIES");
+                sPostSearchContinetList = savedInstanceState
+                .getParcelableArrayList("FILTERED_COUNTRIES");
                 sTabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
                 sSearchQuery = savedInstanceState.getString("SEARCH_QUERY");
 
