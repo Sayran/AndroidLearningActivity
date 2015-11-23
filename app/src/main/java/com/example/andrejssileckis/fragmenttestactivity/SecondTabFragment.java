@@ -4,14 +4,12 @@ package com.example.andrejssileckis.fragmenttestactivity;
  * Created by andrejs.sileckis on 10/27/2015.
  */
 
-import android.app.SearchManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -39,8 +37,7 @@ public class SecondTabFragment extends Fragment {
     private static MenuItem mSearchAction;
     private String mSearchQuery;
     private EditText mEditText;
-    private SearchView mSearchView;
-    private SearchManager mSearchManager;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,10 +52,6 @@ public class SecondTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.second_tab_fragment, container, false);
         sIconOpenSearch = getDrawable(getContext(), R.drawable.ic_menu_search);
         sIconCloseSearch = getDrawable(getContext(), R.drawable.ic_menu_close_clear_cancel);
-/*        mSearchManager = (SearchManager) getActivity()
-                .getSystemService(getContext().SEARCH_SERVICE);
-        mSearchView.setSearchableInfo(mSearchManager.getSearchableInfo(getActivity()
-                .getComponentName()));*/
 
         sContinentArrayList = JSON_CONTROLLER.getStructure(getContext());
         this.mEpandableListAdapter = new GenericExpandableListAdapter(getContext()
@@ -68,39 +61,12 @@ public class SecondTabFragment extends Fragment {
 
         mExpandableListView.setAdapter(mEpandableListAdapter);
         expandAll();
-       /* if(savedInstanceState == null){
-            mExpandableListView = (ExpandableListView)
-                    view.findViewById(R.id.location_expand_list);
 
-            mExpandableListView.setAdapter(mEpandableListAdapter);
-        }
-        else {
-                sContinentArrayList = savedInstanceState.getParcelableArrayList("COUNTRIES");
-                sPostSearchContinetList = savedInstanceState
-                .getParcelableArrayList("FILTERED_COUNTRIES");
-                sTabSearchOpened = savedInstanceState.getBoolean("SEARCH_OPENED");
-                sSearchQuery = savedInstanceState.getString("SEARCH_QUERY");
-
-            //onViewStateRestored(savedInstanceState);
-            mExpandableListView = (ExpandableListView)
-                    view.findViewById(R.id.location_expand_list);
-            mEpandableListAdapter = new
-                    GenericExpandableListAdapter(getContext(), sPostSearchContinetList);
-            mExpandableListView.setAdapter(mEpandableListAdapter);
-
-            if(sTabSearchOpened){
-                openSearchBar(sSearchQuery);
-            }
-        }*/
         return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-/*      outState.putParcelableArrayList("COUTRIES", sContinentArrayList);
-        outState.putParcelableArrayList("FILTERED_COUNTRIES", sPostSearchContinetList);
-        outState.putBoolean("SEARCH_OPENED", sTabSearchOpened);
-        outState.putString("SEARCH_QUERY", sSearchQuery);*/
         super.onSaveInstanceState(outState);
     }
 
@@ -108,8 +74,6 @@ public class SecondTabFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mSearchAction = menu.findItem(R.id.action_search);
-       /* mSearchView = new SearchView(((MainActivity) getActivity())
-                .getSupportActionBar().getThemedContext());*/
         MenuItemCompat.setShowAsAction(mSearchAction, MenuItemCompat
                 .SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
@@ -118,14 +82,7 @@ public class SecondTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
-        /*mSearchAction = menu.findItem(R.id.action_search);
-        mSearchView = new SearchView(((MainActivity) getActivity())
-                .getSupportActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(mSearchAction,MenuItemCompat
-                .SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setOnCloseListener(this);*/
+
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -151,9 +108,6 @@ public class SecondTabFragment extends Fragment {
         mEditText.setText(queryText);
         mEditText.requestFocusFromTouch();
         sTabSearchOpened = true;
-/*        mSearchView.setOnQueryTextListener(this);
-        mSearchView.requestFocusFromTouch();
-        mSearchView.setOnCloseListener(this);*/
 
     }
 
@@ -201,6 +155,8 @@ public class SecondTabFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             mSearchQuery = mEditText.getText().toString();
+            /*Toast.makeText(getContext(),mSearchQuery + " this is current data in search",
+                    Toast.LENGTH_SHORT).show();*/
             mEpandableListAdapter.filterData(mSearchQuery);
             expandAll();
 
