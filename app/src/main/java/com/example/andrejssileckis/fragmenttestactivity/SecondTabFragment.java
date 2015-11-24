@@ -81,7 +81,7 @@ public class SecondTabFragment extends Fragment {
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.second_fragment_menu, menu);
 
     }
     public boolean onOptionsItemSelected(MenuItem item) {

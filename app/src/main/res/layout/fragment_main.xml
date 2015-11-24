@@ -63,6 +63,14 @@
         android:layout_above="@+id/btn_displaynotif"
         android:layout_alignStart="@+id/btn_webbrowser" />
 
+    <Button
+        android:id="@+id/btn_to_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Media"
+        android:onClick="onClickToMedia"
+        android:layout_below="@id/btn_dialog2"/>
+
     <!-- <Button
          android:id="@+id/btn_launchMyBrowser"
          android:layout_width="wrap_content"

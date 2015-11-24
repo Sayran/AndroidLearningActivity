@@ -1,5 +1,6 @@
 package com.example.andrejssileckis.fragmenttestactivity;
 
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -20,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.andrejssileckis.medialearnactivity.MediaMainActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -97,7 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick3(View view) {
         startActivityForResult(new Intent(
-                "com.example.andrejssileckis.dialogs.SecondActivity"), mRequestCode);
+                "com.example.andrejssileckis.fragmentactivity.SecondActivity"), mRequestCode);
+    }
+    public void onClickToMedia(View view) {
+        Intent newMediaActivity = new Intent(MainActivity.this, MediaMainActivity.class);
+        startActivity(newMediaActivity);
     }
 
     @Override
