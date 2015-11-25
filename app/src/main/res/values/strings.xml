@@ -11,5 +11,14 @@
     <string name="title_activity_maps2">Map</string>
     <string name="title_activity_media_main">MediaMainActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="play_icon">&#62;</string>
+    <string name="play_next">&#62;&#62;</string>
+    <string name="play_back">&#60;</string>
+    <string name="play_previous">&#60;&#60;</string>
+    <string name="play_pause">||</string>
+    <string name="player_music">Music Player</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
