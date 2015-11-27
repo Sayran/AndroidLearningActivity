@@ -43,6 +43,7 @@
     </ScrollView>
     <EditText
         android:id="@+id/editTextDialogUserInput"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">

@@ -29,7 +29,6 @@ public class SecondTabFragment extends Fragment {
 
     private static final JsonController JSON_CONTROLLER = new JsonController();
     private GenericExpandableListAdapter mEpandableListAdapter;
-    private static ArrayList<Continent> sContinentArrayList  = new ArrayList<>();
     private ExpandableListView mExpandableListView;
     private static boolean sTabSearchOpened = false;
     private static Drawable sIconOpenSearch;
@@ -53,7 +52,7 @@ public class SecondTabFragment extends Fragment {
         sIconOpenSearch = getDrawable(getContext(), R.drawable.ic_menu_search);
         sIconCloseSearch = getDrawable(getContext(), R.drawable.ic_menu_close_clear_cancel);
 
-        sContinentArrayList = JSON_CONTROLLER.getStructure(getContext());
+        ArrayList<Continent> sContinentArrayList = JSON_CONTROLLER.getStructure(getContext());
         this.mEpandableListAdapter = new GenericExpandableListAdapter(getContext()
                 , sContinentArrayList);
         mExpandableListView = (ExpandableListView) view
@@ -99,15 +98,18 @@ public class SecondTabFragment extends Fragment {
 
     public void openSearchBar(String queryText){
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.search_bar);
-        actionBar.setDisplayShowTitleEnabled(false);
-        mEditText = (EditText) actionBar.getCustomView().findViewById(R.id.etSearch);
-        mSearchAction.setIcon(sIconCloseSearch);
-        mEditText.addTextChangedListener(new SearchWatcher());
-        mEditText.setText(queryText);
-        mEditText.requestFocusFromTouch();
-        sTabSearchOpened = true;
+        if (actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.search_bar);
+            actionBar.setDisplayShowTitleEnabled(false);
+            mEditText = (EditText) actionBar.getCustomView().findViewById(R.id.etSearch);
+            mSearchAction.setIcon(sIconCloseSearch);
+            mEditText.addTextChangedListener(new SearchWatcher());
+            mEditText.setText(queryText);
+            mEditText.requestFocusFromTouch();
+            sTabSearchOpened = true;
+        }
+
 
     }
 
@@ -129,17 +131,16 @@ public class SecondTabFragment extends Fragment {
         return false;
     }
 
-    public boolean onQueryTextSubmit(String query) {
+    /*public boolean onQueryTextSubmit(String query) {
         mEpandableListAdapter.filterData(query);
         expandAll();
         return false;
     }
-
     public boolean onQueryTextChange(String newText) {
         mEpandableListAdapter.filterData(newText);
         expandAll();
         return false;
-    }
+    }*/
 
     public class SearchWatcher implements TextWatcher {
         @Override
@@ -155,8 +156,6 @@ public class SecondTabFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             mSearchQuery = mEditText.getText().toString();
-            /*Toast.makeText(getContext(),mSearchQuery + " this is current data in search",
-                    Toast.LENGTH_SHORT).show();*/
             mEpandableListAdapter.filterData(mSearchQuery);
             expandAll();
 

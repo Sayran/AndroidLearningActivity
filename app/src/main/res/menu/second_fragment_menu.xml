@@ -9,6 +9,6 @@
         android:icon="@android:drawable/ic_menu_search"
         android:menuCategory="secondary"
         app:showAsAction="always|collapseActionView"
-        android:title="@string/action_search"/>>
+        android:title="@string/action_search"/>
 
 </menu>

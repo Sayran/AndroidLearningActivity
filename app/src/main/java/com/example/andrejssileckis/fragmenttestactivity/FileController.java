@@ -4,14 +4,15 @@ package com.example.andrejssileckis.fragmenttestactivity;
  * Created by andrejs.sileckis on 11/2/2015.
  */
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-
-import android.content.Context;
-import android.widget.Toast;
+import java.io.IOException;
 
 public class FileController {
 
@@ -40,9 +41,7 @@ public class FileController {
                     flashMessage("Unable to create text file.");
                 }
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -73,9 +72,7 @@ public class FileController {
                 flashMessage("Unable to read. File may be missing or empty.");
             }
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -98,7 +95,7 @@ public class FileController {
                 BufferedWriter out = new BufferedWriter(textFileWriter);
 
                 // create the content string
-                String contentString = new String(contents);
+                String contentString = contents;
 
                 // write the updated content
                 out.write(contentString);
@@ -110,9 +107,7 @@ public class FileController {
                 flashMessage("Cannot update. File does not exist.");
             }
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -135,8 +130,6 @@ public class FileController {
             }
 
         } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -163,8 +156,6 @@ public class FileController {
 
         } catch (NullPointerException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -175,8 +166,6 @@ public class FileController {
         try {
             Toast.makeText(mContext, customText, Toast.LENGTH_SHORT).show();
         } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }

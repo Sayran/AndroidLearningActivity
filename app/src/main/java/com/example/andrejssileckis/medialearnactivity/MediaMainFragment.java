@@ -148,8 +148,8 @@ public class MediaMainFragment extends Fragment implements View.OnClickListener 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getContext(),"Song List builded, Found: " + mSongsList.size(),
-                    Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(getContext(),"Song List builded, Found: " + mSongsList.size(),
+                    Toast.LENGTH_SHORT).show();*/
         }
     }
     public void initializeView(View view){

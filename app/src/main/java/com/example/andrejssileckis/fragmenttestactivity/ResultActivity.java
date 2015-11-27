@@ -3,6 +3,7 @@ package com.example.andrejssileckis.fragmenttestactivity;
 /**
  * Created by andrejs.sileckis on 10/26/2015.
  */
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,21 +66,20 @@ public class ResultActivity extends AppCompatActivity{
 
         } catch (NullPointerException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        final TextView mResult = (TextView)findViewById(R.id.contentsTextView);
-        final TextView mTempResult = (TextView)findViewById(R.id.textView1);
+        finally {
+            TextView mResult = (TextView) findViewById(R.id.contentsTextView);
+//        final TextView mTempResult = (TextView)findViewById(R.id.textView1);
 
-        mResult.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                textEdition();
-                return false;
-            }
-        });
-
+            mResult.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    textEdition();
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ResultActivity extends AppCompatActivity{
                 break;
 
             case R.id.edit_text:
-                String temp = mFileController.readTextFile(mActualFile);
+//                String temp = mFileController.readTextFile(mActualFile);
                 Toast.makeText(this, "Taking some changes in text.... Please Wait.....",
                         Toast.LENGTH_SHORT).show();
                 textEdition();
@@ -137,7 +137,7 @@ public class ResultActivity extends AppCompatActivity{
 
     public void textEdition(){
         LayoutInflater layoutInflater = LayoutInflater.from(ResultActivity.this);
-        View view = layoutInflater.inflate(R.layout.edit_text, null);
+        @SuppressLint("InflateParams") View view = layoutInflater.inflate(R.layout.edit_text, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 ResultActivity.this);
         alertDialogBuilder.setView(view);

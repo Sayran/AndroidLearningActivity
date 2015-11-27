@@ -10,11 +10,12 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit you Text : "
+        android:text="Edit your Text : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/editTextDialogUserInput"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 

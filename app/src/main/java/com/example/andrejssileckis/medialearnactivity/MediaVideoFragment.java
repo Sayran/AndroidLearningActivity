@@ -58,7 +58,7 @@ public class MediaVideoFragment extends Fragment {
                 mVideoView.seekTo(mPosition);
                 if(mPosition == 0){
                     mVideoView.requestFocus();
-                    mVideoView.start();
+                    //mVideoView.start();
                 }
                 else{mVideoView.pause();}
             }
@@ -88,16 +88,8 @@ public class MediaVideoFragment extends Fragment {
 
         for (HashMap hashMap:mVideoList){
             Set<String> keys = hashMap.keySet();
-
-            if (keys != null) {
-                /*for(String key: keys){
-                    Toast.makeText(getContext(),hashMap.get(key)+"",Toast.LENGTH_SHORT).show();
-                    //mVideoKeys.add(key);
-                }*/
-                Toast.makeText(getContext(),hashMap.get(keys.iterator().next())+"",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(),keys.iterator().next(),Toast.LENGTH_SHORT).show();
-                mVideoKeys.add(hashMap.get(keys.iterator().next())+"");
-            }
+            Toast.makeText(getContext(),hashMap.get(keys.iterator().next())+"",Toast.LENGTH_SHORT).show();
+            mVideoKeys.add(hashMap.get(keys.iterator().next())+"");
 
 
         }

@@ -1,5 +1,6 @@
 package com.example.andrejssileckis.fragmenttestactivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,9 +15,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by andrejs.sileckis on 11/10/2015.
- */
 
 public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         implements View.OnClickListener {
@@ -60,8 +58,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         ArrayList<Country> countryArrayList = mChangedList.get(groupPosition).getCountryList();
-        Country country = countryArrayList.get(childPosition);
-        return country;
+        return countryArrayList.get(childPosition);
     }
 
     @Override
@@ -79,6 +76,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         return true;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
@@ -96,6 +94,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         return convertView;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parent) {
@@ -111,7 +110,7 @@ public class GenericExpandableListAdapter extends BaseExpandableListAdapter
         TextView textChild = (TextView) convertView.findViewById
                 (R.id.textChildViewInExpandListView);
 
-        textChild.setText(country.getCountry() + " " + country.getCapital());
+        textChild.setText(String.format("%s %s", country.getCountry(), country.getCapital()));
 
         Object tag;
         tag = country;
