@@ -1,6 +1,7 @@
 package com.example.andrejssileckis.medialearnactivity;
 
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.andrejssileckis.fragmenttestactivity.R;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,6 +34,9 @@ public class MediaMainFragment extends Fragment implements View.OnClickListener 
     private static boolean ONE_TIME_ONLY = false;
     private SeekBar mSeekBar;
     private TextView mLogoText, mSongNameText, mPassesTimeText, mTotalTimeText;
+    private ArrayList<HashMap<String, String>> mSongsList;
+    private final MediaDataManager mSongsManager = new MediaDataManager("song");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +44,8 @@ public class MediaMainFragment extends Fragment implements View.OnClickListener 
         View view = inflater.inflate(R.layout.fragment_media_main, container, false);
 
         initializeView(view);
-
+        SongsFinder songsFinder = new SongsFinder();
+        songsFinder.execute();
         return view;
     }
 
@@ -123,6 +130,26 @@ public class MediaMainFragment extends Fragment implements View.OnClickListener 
             default:
                 break;
 
+        }
+    }
+
+    public class SongsFinder extends AsyncTask<String,Integer,String> {
+        @Override
+        protected String doInBackground(String... params) {
+            mSongsList = mSongsManager.getPlayList();
+            return "All done.";
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Toast.makeText(getContext(),"Song List builded, Found: " + mSongsList.size(),
+                    Toast.LENGTH_SHORT).show();
         }
     }
     public void initializeView(View view){

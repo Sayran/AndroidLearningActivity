@@ -79,7 +79,8 @@
 
         <activity
             android:name="com.example.andrejssileckis.medialearnactivity.MediaMainActivity"
-            android:label="@string/title_activity_media_main">
+            android:label="@string/title_activity_media_main"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name=".medialearnactivity.MediaMainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
