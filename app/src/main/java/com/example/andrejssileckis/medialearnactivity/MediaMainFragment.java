@@ -1,5 +1,6 @@
 package com.example.andrejssileckis.medialearnactivity;
 
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class MediaMainFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_media_main, container, false);
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         initializeView(view);
         SongsFinder songsFinder = new SongsFinder();

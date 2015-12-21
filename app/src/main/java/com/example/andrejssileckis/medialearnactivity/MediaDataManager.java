@@ -3,6 +3,7 @@ package com.example.andrejssileckis.medialearnactivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class MediaDataManager {
     /*final String MEDIA_PATH = Environment.getExternalStorageDirectory()
@@ -10,6 +11,8 @@ public class MediaDataManager {
     final String MEDIA_PATH = "/storage/sdcard1/";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private ArrayList<HashMap<String, String>> videoList = new ArrayList<>();
+    private ArrayList<String> mVideoKeys = new ArrayList<>();
+    private ArrayList<String> mAudioKeys = new ArrayList<>();
     private String mp3Pattern = ".mp3";
     private String mAviPattern = ".avi";
     private static String sRequiredAction = "";
@@ -41,8 +44,10 @@ public class MediaDataManager {
         // return songs list array
         switch (sRequiredAction) {
             case "song":
+                audioKeyBuilder(songsList);
                 return songsList;
             case "video":
+                videoKeyBuilder(videoList);
                 return videoList;
             default:
                 return null;
@@ -103,5 +108,31 @@ public class MediaDataManager {
             // Adding each video to VideoList
             videoList.add(videoMap);
         }
+    }
+
+    public void videoKeyBuilder(ArrayList<HashMap<String, String>> hashMapArrayList){
+        for (HashMap hashMap:hashMapArrayList){
+            Set<String> keys = hashMap.keySet();
+/*     Toast.makeText(getContext(),hashMap.get(keys.iterator().next())+"",
+                Toast.LENGTH_SHORT).show();*/
+            mVideoKeys.add(hashMap.get(keys.iterator().next())+"");
+        }
+    }
+
+    public void audioKeyBuilder(ArrayList<HashMap<String, String>> hashMapArrayList){
+        for (HashMap hashMap:hashMapArrayList){
+            Set<String> keys = hashMap.keySet();
+/*     Toast.makeText(getContext(),hashMap.get(keys.iterator().next())+"",
+                Toast.LENGTH_SHORT).show();*/
+            mAudioKeys.add(hashMap.get(keys.iterator().next())+"");
+        }
+    }
+
+    public ArrayList<String> getmAudioKeys() {
+        return mAudioKeys;
+    }
+
+    public ArrayList<String> getmVideoKeys() {
+        return mVideoKeys;
     }
 }

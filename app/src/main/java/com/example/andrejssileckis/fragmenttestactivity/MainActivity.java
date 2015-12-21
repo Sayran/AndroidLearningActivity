@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -22,14 +24,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.andrejssileckis.medialearnactivity.MediaMainActivity;
+import com.example.andrejssileckis.medialearnactivity.MediaDataPathBuildService;
+import com.example.andrejssileckis.medialearnactivity.MediaDataStorageClass;
+import com.example.andrejssileckis.medialearnactivity.VideoActivity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity   {
+
+    private MainActivity.BroadcastListener mBroadcastListener;
     private CharSequence[] mItems = {"Home", "Work", "Garden", "Beach"};
     private boolean[] mItemChecked = new boolean[mItems.length];
+
+    private ArrayList<HashMap<String, String>> mVideoList = new ArrayList<>();
     public int mRequestCode = 1;
     public int mNotificationID = 1;
+    private static MediaDataStorageClass sMediaDataStorage;
+    private static Boolean received = false;
+    private boolean mIsActivityPaused = false;
 
     public final static JsonController JSON_CONTROLLER = new JsonController();
     private ProgressDialog mProgressDialog;
@@ -40,7 +54,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        launchMediaDataCollectionService();
         createTabsOverlay();
+        mBroadcastListener = new BroadcastListener();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("VIDEO_DATA");
+        registerReceiver(mBroadcastListener,intentFilter);
+        launchMediaDataCollectionService();
     }
 
 
@@ -58,6 +78,24 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 //        int id = mItem.getItemId();
         return super.onOptionsItemSelected(mItem);
+    }
+
+    @Override
+    protected void onPause() {
+        mIsActivityPaused = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        mIsActivityPaused = false;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mBroadcastListener==null) unregisterReceiver(mBroadcastListener);
+        super.onDestroy();
     }
 
     public void onClick(View view) {
@@ -103,8 +141,13 @@ public class MainActivity extends AppCompatActivity {
                 "com.example.andrejssileckis.fragmentactivity.SecondActivity"), mRequestCode);
     }
     public void onClickToMedia(View view) {
-        Intent newMediaActivity = new Intent(MainActivity.this, MediaMainActivity.class);
-        startActivity(newMediaActivity);
+
+        Intent newVideoActivity  = new Intent(MainActivity.this, VideoActivity.class);
+        if(received){
+            newVideoActivity.putExtra("data",mVideoList);
+        }
+        newVideoActivity.putExtra("status",received);
+        startActivity(newVideoActivity);
     }
 
     @Override
@@ -256,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createTabsOverlay() {
+
         final TabLayout TAB_LAYOUT = (TabLayout) findViewById(R.id.tab_layout);
         TAB_LAYOUT.addTab(TAB_LAYOUT.newTab().setText("Main"));
         TAB_LAYOUT.addTab(TAB_LAYOUT.newTab().setText("Map"));
@@ -281,5 +325,31 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void launchMediaDataCollectionService(){
+        Intent mediaDataCollectionService = new Intent(this, MediaDataPathBuildService.class);
+        startService(mediaDataCollectionService);
+    }
+
+    public ArrayList<HashMap<String, String>> getmVideoList() {
+        return mVideoList;
+    }
+
+    private class BroadcastListener extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(!mIsActivityPaused) {
+                mVideoList = ((ArrayList<HashMap<String, String>>)
+                        intent.getSerializableExtra("data"));
+                if(mVideoList != null && mVideoList.size()!=0) {
+                    Toast.makeText(context, mVideoList.size() + " got data in Main Activity",
+                            Toast.LENGTH_SHORT).show();
+                    received = true;
+                    unregisterReceiver(mBroadcastListener);
+                }
+            }
+        }
     }
 }

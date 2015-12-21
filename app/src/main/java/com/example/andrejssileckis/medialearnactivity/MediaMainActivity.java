@@ -1,15 +1,19 @@
 package com.example.andrejssileckis.medialearnactivity;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.andrejssileckis.fragmenttestactivity.MainActivity;
 import com.example.andrejssileckis.fragmenttestactivity.R;
@@ -20,11 +24,13 @@ public class MediaMainActivity extends AppCompatActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private MediaDataStorageClass mMediaDataStorageClass;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     protected ViewPager mViewPager;
+
 
 
     @Override
@@ -45,6 +51,17 @@ public class MediaMainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mediaReceiver);
     }
 
     @Override
@@ -79,5 +96,12 @@ public class MediaMainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private BroadcastReceiver mediaReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mMediaDataStorageClass = (MediaDataStorageClass)intent.getSerializableExtra("result");
+            Toast.makeText(getBaseContext(),mMediaDataStorageClass.getVideoList().size()+" amount of videos found",Toast.LENGTH_SHORT).show();
+        }
+    };
 
 }
