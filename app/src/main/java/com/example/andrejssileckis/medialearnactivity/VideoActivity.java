@@ -10,7 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -30,6 +30,7 @@ import java.util.TimerTask;
 public class VideoActivity extends AppCompatActivity {
 
     private static final int AUTO_HIDE_DELAY_MILLIS = 800;
+    CustomMediaController customMediaController;
 
     private VideoView mVideoView;
     private int mPosition = 0;
@@ -39,7 +40,7 @@ public class VideoActivity extends AppCompatActivity {
     private ArrayList<String> mVideoKeys = new ArrayList<>();
     private static boolean mIsActivityPaused = false;
     private static boolean mIsReceived = false;
-    private Button mTestViewButton;
+    private ImageButton mTestViewButton;
     private View mControlsView;
     private VideoActivity.BroadcastListener mBroadcastListener;
 
@@ -65,14 +66,16 @@ public class VideoActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("VIDEO_DATA");
         registerReceiver(mBroadcastListener, intentFilter);*/
-        mTestViewButton = (Button)findViewById(R.id.testButton);
 
         mControlsView = findViewById(R.id.fullscreen_content_controls);
+//        Button testButton = (Button) findViewById(R.id.testButton);
         mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setOnSystemUiVisibilityChangeListener(new SysUiVisibilityListener());
 
         if(mMediaController == null) {
-            mMediaController = new MediaController(this);
+           // mMediaController = new MediaController(this);
+            customMediaController = new CustomMediaController(this);
+            mMediaController = customMediaController;
 /*            if(!mTestViewButton.isShown()) mTestViewButton.setVisibility(View.VISIBLE);
             else mTestViewButton.setVisibility(View.INVISIBLE);*/
         }
