@@ -31,6 +31,7 @@ public class VideoActivity extends AppCompatActivity {
 
     private static final int AUTO_HIDE_DELAY_MILLIS = 800;
     CustomMediaController customMediaController;
+    VideoControllerView videoControllerView;
 
     private VideoView mVideoView;
     private int mPosition = 0;
@@ -42,6 +43,7 @@ public class VideoActivity extends AppCompatActivity {
     private static boolean mIsReceived = false;
     private ImageButton mTestViewButton;
     private View mControlsView;
+    private ImageButton mFullScreen;
     private VideoActivity.BroadcastListener mBroadcastListener;
 
     private static final int UI_HIDE_OPTIONS = (View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -67,7 +69,7 @@ public class VideoActivity extends AppCompatActivity {
         intentFilter.addAction("VIDEO_DATA");
         registerReceiver(mBroadcastListener, intentFilter);*/
 
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
+        //mControlsView = findViewById(R.id.fullscreen_content_controls);
 //        Button testButton = (Button) findViewById(R.id.testButton);
         mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setOnSystemUiVisibilityChangeListener(new SysUiVisibilityListener());
@@ -80,19 +82,21 @@ public class VideoActivity extends AppCompatActivity {
             else mTestViewButton.setVisibility(View.INVISIBLE);*/
         }
         if(mVideoList!=null && mVideoList.size()!=0  ) {
-            mMediaController.setAnchorView(mVideoView);
             mVideoView.setMediaController(mMediaController);
+
 
             mVideoKeys = videoKeyBuilder(mVideoList);
             mVideoView.setVideoPath(mVideoKeys.get(2));
 
             mVideoView.requestFocus();
+            mMediaController.setAnchorView(mVideoView);
             mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mVideoView.seekTo(mPosition);
                     if (mPosition == 0) {
                         mVideoView.requestFocus();
+
                         // mVideoView.start();
                     } else {
                         mVideoView.pause();
@@ -108,6 +112,7 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.setSystemUiVisibility(UI_HIDE_OPTIONS);
+
             }
         });
 

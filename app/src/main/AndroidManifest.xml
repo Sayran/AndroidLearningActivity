@@ -97,13 +97,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--
-             ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.example.andrejssileckis.medialearnactivity.VideoActivity"
@@ -116,6 +109,15 @@
                 android:value="com.example.andrejssileckis.fragmenttestactivity.MainActivity" />
 
             <receiver android:name=".VideoLocationReceiver" />
+        </activity>
+        <activity android:name="com.example.andrejssileckis.teststuff.BlackActivity" />
+        <activity
+            android:name="com.example.andrejssileckis.teststuff.NavDraw"
+            android:label="@string/title_activity_nav_draw"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.andrejssileckis.fragmenttestactivity.MainActivity" />
         </activity>
     </application>
 

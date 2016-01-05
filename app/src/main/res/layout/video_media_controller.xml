@@ -97,19 +97,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="4dip"
-            android:layout_weight="0.08" />
-
+            android:layout_weight="0.08"
+             android:background="@android:color/transparent"/>
+xmlns:android="http://schemas.android.com/apk/res/android"
     </LinearLayout>
 
 </LinearLayout>-->
-<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<ImageButton
     android:id="@+id/fullscreen"
-android:layout_marginTop="-7dp"
-android:paddingTop="4dp"
-android:paddingBottom="4dp"
-android:paddingLeft="10dp"
-android:paddingRight="4dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="4dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_media_fullscreen_stretch"
+    android:contentDescription="@string/description"
+    android:layout_alignParentEnd="true" />-->
+<ImageButton android:id="@+id/video_list"
+xmlns:android="http://schemas.android.com/apk/res/android"
+style="@android:style/Widget.ListView.DropDown"
+android:contentDescription="@string/description"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:background="@android:color/transparent"
-android:contentDescription="@string/description" />
+android:layout_gravity="left"
+android:layout_alignBottom="@+id/fullscreen"
+android:background="@mipmap/ic_styled_more"
+android:layout_alignParentTop="true" />
+
+<!--<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+
+    <ImageButton android:id="@+id/video_list"
+        style="@android:style/Widget.ListView.DropDown"
+        android:contentDescription="@string/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_alignBottom="@+id/fullscreen"
+        android:background="@drawable/ic_more_options"
+        android:layout_alignParentTop="true" />
+
+
+</RelativeLayout>-->

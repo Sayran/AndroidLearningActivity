@@ -24,5 +24,11 @@
     <string name="title_activity_video">VideoActivity</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="TestButton">B</string>
+    <string name="title_activity_test_media_nav_drawer">TestMediaNavDrawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_black">BlackActivity</string>
+    <string name="title_activity_nav_draw">NavDraw</string>
 
 </resources>

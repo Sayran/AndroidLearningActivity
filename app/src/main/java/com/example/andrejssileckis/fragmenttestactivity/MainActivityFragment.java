@@ -11,22 +11,17 @@ import android.view.ViewGroup;
  */
 public class MainActivityFragment extends Fragment {
 
-    /*FragmentActivity listener;
-
-    public MainActivityFragment() {
-    }
-
-    @Override
-    public void onAttach(Context context){
-        super.onAttach(context);
-        this.listener = (FragmentActivity)context;
-
-    }
-*/    @Override
+   @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+       View view = inflater.inflate(R.layout.fragment_main, container, false);
+       MainActivity mainActivity = (MainActivity) getActivity();
+       if(!mainActivity.getReceived()) mainActivity.launchBroadcastListener();
+       else view.findViewById(R.id.btn_to_media).setVisibility(View.VISIBLE);
+
+       return view;
     }
+
 
 
 }

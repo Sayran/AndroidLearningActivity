@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.andrejssileckis.medialearnactivity.MediaDataPathBuildService;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity   {
     public int mRequestCode = 1;
     public int mNotificationID = 1;
     private static MediaDataStorageClass sMediaDataStorage;
+
+
+
     private static Boolean received = false;
     private boolean mIsActivityPaused = false;
 
@@ -56,13 +60,13 @@ public class MainActivity extends AppCompatActivity   {
         setSupportActionBar(toolbar);
         launchMediaDataCollectionService();
         createTabsOverlay();
-        mBroadcastListener = new BroadcastListener();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("VIDEO_DATA");
-        registerReceiver(mBroadcastListener,intentFilter);
-        launchMediaDataCollectionService();
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        //launchBroadcastListener();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity   {
     protected void onResume() {
         mIsActivityPaused = false;
         super.onResume();
+        launchBroadcastListener();
     }
 
     @Override
@@ -347,9 +352,24 @@ public class MainActivity extends AppCompatActivity   {
                     Toast.makeText(context, mVideoList.size() + " got data in Main Activity",
                             Toast.LENGTH_SHORT).show();
                     received = true;
+
+                    Button media = (Button) findViewById(R.id.btn_to_media);
+                    media.setVisibility(View.VISIBLE);
                     unregisterReceiver(mBroadcastListener);
                 }
             }
         }
+    }
+
+    public Boolean getReceived() {
+        return received;
+    }
+
+    public void launchBroadcastListener(){
+        mBroadcastListener = new BroadcastListener();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("VIDEO_DATA");
+        registerReceiver(mBroadcastListener,intentFilter);
+        launchMediaDataCollectionService();
     }
 }

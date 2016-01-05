@@ -69,6 +69,7 @@
         android:layout_height="wrap_content"
         android:text="View Media"
         android:onClick="onClickToMedia"
+        android:visibility="invisible"
         android:layout_below="@id/btn_dialog2"/>
 
     <!-- <Button

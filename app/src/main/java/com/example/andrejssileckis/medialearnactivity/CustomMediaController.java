@@ -1,7 +1,9 @@
 package com.example.andrejssileckis.medialearnactivity;
+
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.Toast;
 
 import com.example.andrejssileckis.fragmenttestactivity.R;
 
@@ -21,29 +24,34 @@ import java.lang.reflect.Field;
  */
 public class CustomMediaController extends MediaController {
     private Context mContext;
-    private OnMediaControlerInteractionListener mListener;
+    private ImageButton mFullScreen;
+    private ImageButton mDataList;
 
+    private OnMediaControllerInteractionListener mListener;
     public CustomMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
     }
-
     public CustomMediaController(Context context, boolean useFastForward) {
         super(context, useFastForward);
         mContext = context;
     }
-
     public CustomMediaController(Context context) {
         super(context);
         mContext = context;
     }
-
-    public interface OnMediaControlerInteractionListener {
+    public interface OnMediaControllerInteractionListener {
         void onRequestFullScreen();
     }
-    public void setListener(OnMediaControlerInteractionListener listener){
+    public void setListener(OnMediaControllerInteractionListener listener){
         mListener = listener;
     }
+
+    /**
+     *TODO:Complete Rewrite controller layout and implement it's functions,plus implementation
+     * of fullscreen and videoList( as navigation drawer
+     */
+
 
     @Override
     public void setAnchorView(View view) {
@@ -51,20 +59,41 @@ public class CustomMediaController extends MediaController {
 
         FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams
                 (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        frameParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+        frameParams.gravity = Gravity.CENTER_HORIZONTAL|Gravity.RIGHT;
 
-        ImageButton fullScreenButton = (ImageButton) LayoutInflater.from(mContext)
+        View controller = LayoutInflater.from(mContext)
                 .inflate(R.layout.video_media_controller, null);
+        try {
+            mFullScreen = (ImageButton) findViewById(R.id.fullscreen);
+            mDataList = (ImageButton) findViewById(R.id.video_list);
+        }catch (NullPointerException e){
+            Log.e("Custom Media Controller", "Nullpointer in button initialisation");
+        }
 
-        fullScreenButton.setOnClickListener(new OnClickListener() {
+           controller.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext," does it matter ?",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+       /* menuButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListener != null){
+                    Toast.makeText(mContext, "This is List Button", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
+        /*controller.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mListener != null){
                     mListener.onRequestFullScreen();
                 }
             }
-        });
-        addView(fullScreenButton, frameParams);
+        });*/
+        addView(controller, frameParams);
     }
 
     @Override
@@ -96,17 +125,19 @@ public class CustomMediaController extends MediaController {
 
                 mDecor.measure(MeasureSpec.makeMeasureSpec(mAnchor.getWidth(), MeasureSpec.AT_MOST),
                         MeasureSpec.makeMeasureSpec(mAnchor.getHeight(), MeasureSpec.AT_MOST));
-                mDecor.setPadding(0, 0, 0, 0);
+                /*Toast.makeText(getContext(), anchorPos[0]+"anchor x possition; "+anchorPos[1]+
+                        " anchor y possition", Toast.LENGTH_SHORT).show();*/
+                mDecor.setPadding(0, 320, 80, 0);
 
                 WindowManager.LayoutParams params = mDecorLayoutParams;
                 params.verticalMargin =  0;
                 params.horizontalMargin = 0;
                 params.width = mAnchor.getWidth();
                 params.height = mAnchor.getHeight();
-                params.gravity = Gravity.LEFT|Gravity.TOP;
+                params.gravity = Gravity.BOTTOM|Gravity.RIGHT;
                 params.x = anchorPos[0];
                 params.y = anchorPos[1] + mAnchor.getHeight() - mDecor.getMeasuredHeight();
-                mWindowManager.updateViewLayout(mDecor, mDecorLayoutParams);
+                mWindowManager.updateViewLayout(mDecor, params);
 
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
